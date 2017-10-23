@@ -12,11 +12,43 @@ def FTCS(phiOld, d, nt):
     #Create a new time-step array for phi#
     phi = phiOld.copy()
     
+
     #FTCS for all time steps#
-    for it in xrange(int(nt)):
-        phi[0] = ???
+    for i in xrange(int(nt)):
+            phi[i+1] = phiOld[i] + d*(phiOld[i] - 2*phiOld[i] + phiOld[i]) 
+        
+    
+    return phi
         
+
+
+def BTCS(phi , d , nt) :
+    nx = len (phi)
+    
+# array representing BTCS 
+    M = np . zeros ([ nx , nx ]) 
+    
+# Zero gradient boundary conditions 
+    M[0 ,0] = 1.
+    M[0 ,1] = -1.
+    M[-1,-1] = 1.
+    M[-1,-2] = -1.
+    
+    
+    for i in xrange (1 , nx - 1):
         
-        
-    for i in range (1, nx - 1):
-        phi[i] = ???
+        M[i , i -1] = -d
+        M[i , i ] = 1+2*d
+        M[i , i +1] = -d
+# BTCS for a l l time steps
+    for it in xrange (int(nt)):
+     
+     # RHS for zero gradient boundary conditions 
+        phi [0] = 0
+        phi [-1] = 0
+     
+     
+        phi = la . solve (M, phi )
+
+
+    return phi
