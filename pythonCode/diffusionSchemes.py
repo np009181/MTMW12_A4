@@ -12,16 +12,21 @@ def FTCS(phiOld, d, nt):
     #Create a new time-step array for phi#
     phi = phiOld.copy()
     
+#FTCS for all time steps, need to add formula for endpoints#
+  for it in xrange(int(nt)):
+    #Boundary conditions state that deltaphi/deltax is zero so we have#
+    #to set phi[0] to phi[1]#
+    phi[0] = phiOld[0] + d*(phiOld[2] - 2*phiOld[1] + phiOld[0])
+    phi[0] = phi[1]
+    #begin space steps for phi#
+    for j in range (2, nx - 2):
+        phi[j] = phiOld[j] + d*(phiOld[j + 1] - 2*phiOld[j] + phiOld[j - 1])
+        phi[nx - 1] = phiOld[0] + d*(phiOld[nx - 3] - 2*phiOld[nx - 2] + phiOld[nx - 1])
+        print(phi)
+        #Redefine phiOld so we can create new steps in time within the loop#
+        phiOld = phi.copy()
+        return phi
 
-   #FTCS for all time steps, need to add formula for endpoints#
-   for it in xrange(int(nt)):
-        phi[0] = phiOld[0] + d*(phiOld[2] - 2*phiOld[1] + phiOld[0])
-        
-        for j in range (1, nx - 1):
-            phi[j] = phiOld[j] + d*(phiOld[j] - 2*phiOld[j] + phiOld[j])
-            phi[nx - 1] = phiOld[0] + d*(phiOld[nx - 3] - 2*phiOld[nx - 2] + phiOld[nx - 1])
-            
-        phiOld = phi.copy() 
             
 
     return phi
