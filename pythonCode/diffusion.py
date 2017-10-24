@@ -64,7 +64,19 @@ def main():
     plt.xlabel('$x$')
     plt.savefig('plots/FTCS_BTCS.pdf')
     
-    
+    #Finding the error of the numerical solutions#
+    eFTCS = phiAnalytic - phiFTCS
+    eBTCS = phiAnalytic - phiBTCS
+    font = {'size'  : 10}
+    plt.rc('font', **font)
+    plt.legend(bbox_to_anchor=(1.1,1))
+    plt.clf()
+    plt.ion
+    plt.figure(2)
+    plt.plot(x, eFTCS, label='Error FTCS', color='blue')
+    plt.plot(x, eBTCS, label='Error BTCS', color='red')
+    plt.savefig('plots/Error_FTCS_BTCS.pdf')
+    plt.xlabel('$x$')
     
 main()
     
