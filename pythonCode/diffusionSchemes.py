@@ -13,10 +13,15 @@ def FTCS(phiOld, d, nt):
     phi = phiOld.copy()
     
 
-    #FTCS for all time steps#
-    for i in xrange(int(nt)):
-            phi[i+1] = phiOld[i] + d*(phiOld[i] - 2*phiOld[i] + phiOld[i]) 
-        
+   #FTCS for all time steps, need to add formula for endpoints#
+    phi[0] = phiOld[0] + d*(phiOld[2] - 2*phiOld[1] + phiOld[0])
+    
+    phi[nt] = phiOld[nx] + 0.5*d*(phiOld[nx - 2] - 4*phiOld[nx - 1] 
+        + 3*phiOld[nx])
+    
+    for it in xrange(int(nt)):
+        phi[it+1] = phiOld[it] + d*(phiOld[it] - 2*phiOld[it] + phiOld[it]) 
+       
     
     return phi
         
