@@ -20,13 +20,13 @@
 \thispagestyle{empty}
 
 \title{MTMW12, Assignment 1: Diffusion}
-\author{Your stuent ID}
+\author{23009181}
 \maketitle
 
 
 \begin{enumerate}
 
-\item The numerical solution the one-dimensional diffusion equation
+\item The numerical solution of the one-dimensional diffusion equation
 \begin{equation}
 \frac{\partial\phi}{\partial t}=K\frac{\partial^{2}\phi}{\partial x^{2}}
 \end{equation}
@@ -48,9 +48,8 @@ an infinite domain.
 
 
 \begin{figure}[!tbh]
-% Uncomment these lines to include the figures
-%\includegraphics[width=0.48\linewidth]{../pythonCode/plots/FTCS_BTCS.pdf}
-%\includegraphics[width=0.48\linewidth]{../pythonCode/plots/FTCS_BTCS_Error.pdf}
+\includegraphics[width=0.48\linewidth]{plots/FTCS_BTCS.pdf}
+\includegraphics[width=0.48\linewidth]{plots/Error_FTCS_BTCS.pdf}
 
 \caption{Results of FTCS and BTCS in comparison to the analytic solution. Results
 use 41 points in space and the simulation runs for 40 time-steps,
@@ -60,9 +59,72 @@ each of length $\Delta t=0.1$s using a diffusion number of $K=10^{-3}m^{2}s^{-1}
 
 
 \item The one-dimensional diffusion equation can be used, for example, to
-represent ...
-These initial conditions could represent ...
-These boundary conditions ...
+represent a metal rod of 1m in length that has been heated up from a section in the middle of the rod. The inital temperature difference will begin the diffusion process.
+These initial conditions could represent the area where the rod has been heated. In this case it is between $0.4m$ and $0.6m$ and heated to a degree of $1$, and elsewhere the rod is at a standard tempearture of $0$. We assume that the rod is small enough so that a cross-section of the rod can be assumed to have uniform temperature, which would be our $\partial\phi/\partial x$.
+The boundary conditions could represent the ends of the rod remaining at a standard temperature throughout the whole diffusion process, possibly being kept cool by another source.
+
+
+\item The following graphs show how the FTCS and BTCS diffusion schemes behave when challenged with a significantly larger time step than previously used. The graphs below show the results obtained. 
+\\
+FTCS and BTCS are both of first order of accuracy in time, which means that generally they will yield less accurate results than if we used a second-order accurate equation for time, for example. 
+
+\begin{figure}[!htb]
+\includegraphics[width=0.48\linewidth]{plots/New_FTCS_BTCS.pdf}
+\includegraphics[width=0.48\linewidth]{plots/NewError_FTCS_BTCS.pdf}
+\caption{Results of FTCS and BTCS in comparison to the analytic solution, but this time using a signifcantly larger value for $nt$. Results use 41 points in space and the simulation runs for 400 time-steps, each of length $\Delta t=0.1$s using a diffusion number of $K=10^{-3}m^{2}s^{-1}$. 
+\label{fig:Q3}}
+\end{figure}
+
+\item Here I have designed an experiment to test the stability of the FTCS and BTCS schemes. I decided to change the values of d, since it is affected by both the change in time and the change in space. Changing the values of $\Delta t$ and $\Delta x^2$ wouldn't have made any sense, so instead the value of $K$ was changed. The FTCS and BTCS diffusion code was ran again, but this time with two new values of the diffusion coefficient $K$ to be only slightly different, and the results plotted along with an error graph for each. The graphs for the two new values of $K$ can be seen below.
+
+\begin{figure}[!htb]
+\includegraphics[width=0.48\linewidth]{plots/ChangeD_FTCS_BTCS.pdf}
+\includegraphics[width=0.48\linewidth]{plots/ChangeD1_FTCS_BTCS.pdf}
+\caption{Results of FTCS and BTCS in comparison to the analytic solution, but this time with a diffusion coefficient of $K = 3e^{-3}$ and $K = 3.5e^{-3}$ respectively. Results use 41 points in space and the simulation runs for 40 time-steps, each of length $\Delta t=0.1$s. 
+\label{fig:Q4a}}
+\end{figure}
+
+These figures clearly show a lot is going on when the diffusion coefficient is only changing slightly. We see the FTCS diffusion scheme exhibits changes in stability depending on the value for $d$, where as the BTCS scheme behaves quite well even when the values of $K$ are changed. The errors for BTCS stay relatively the same for both new values for $K$. Below I have included a visual representation of the errors in FTCS and BTCS when the values of $K$ are different.
+\\
+The stability of the BTCS scheme is good due to the Von-Neumann stability analysis. By substituting $\phi_j^{(n)} = Ae^{ikj\Delta x}$ into the BTCS equation, we find that for all $k\Delta x$ and all $d > 0$, $0 \leq A \leq 1$. The BTCS scheme is unconditionally stable and non-oscillatory for the diffusion equation, as we can see from our results in the graphs. 
+\\
+For the FTCS, on performing the Von-Neumann stability analysis we find that for the FTCS scheme to be stable we must take the time step to be very small. With all the values of $K$ already set up, I tested this on my code by changing $\Delta t = 0.01$ and I found that the FTCS scheme behaved much better with the new values of $K$ this time compared to with a larger value for $\Delta t$
+
+\begin{figure}[!htb]
+\includegraphics[width=0.48\linewidth]{plots/D_Error_FTCS_BTCS.pdf}
+\includegraphics[width=0.48\linewidth]{plots/D1_Error_FTCS_BTCS.pdf}
+\caption{Results of FTCS and BTCS error against the analytical solution when using different values of the diffusion coefficient.
+\label{fig:Q4b}}
+\end{figure}
+
+
+\item In this question, I have designed an experiment which tests the order of convergence for my implementation of FTCS. I began by changing some of the defined parameters. I fixed $d$ and varied the values of the spatial and temporal resolution, so I am able to check the convergnce of the scheme. This allows the code to run without having the arguments being the time steps and width. The time steps have also been set to enable the fixed value of $d$ to work and so that we can run the code for the same duration every time.
+In figure \ref{fig:Q5}, we can see that the FTCS scheme shows a low order of convergence when greater values of  
+
+\item The code supplied for defining the initial conditions is defined in a different way than usual. This could be because a step function is not expandable with Taylor polynomials, and so the usual definition of the step function is not suitable for the formulas that we are using in this case. It is not valid 
+
+
+
+\item The advantages of FTCS:
+\begin{itemize}
+\item FTCS is an explicit method, meaning $\phi_j^{n+1}$ can be computed if values of $\phi$ at previous time level is known. This makes the method inexpensive to run.
+\item Provided that certain conditions are met, the FTCS scheme is numerically stable.
+\end{itemize}
+The disadvantages of FTCS:
+\begin{itemize}
+\item In order for FTCS to be stable, for high values of $K$ or high resolution, we require a very small time-step must be taken by the Von-Neumann Stability analysis. 
+\item The choice in $\Delta t$ can affect the stability of FTCS greatly, as shown in Question 4 of this report.
+\end{itemize}
+The advantages of BTCS:
+\begin{itemize}
+\item BTCS is unconditionally stable and non-oscillatory.
+\end{itemize}
+The disadvantages of BTCS:
+\begin{itemize}
+\item The scheme is implicit, meaning that it costs a lot to run computationally. This is because BTCS must find the values of $\phi$ for the next time step using values at the next time step, which results in solving simultaneous equations.
+\end{itemize}
+
+
 
 \end{enumerate}
 \end{document}
